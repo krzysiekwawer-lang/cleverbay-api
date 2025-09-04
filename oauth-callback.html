@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CleverBay OAuth Callback</title>
+    <script>
+        // Funkcja do odbierania tokena z URL
+        function getTokenFromUrl() {
+            // Pobierz fragment URL po # (hash)
+            const hash = window.location.hash.substring(1);
+            
+            // Konwertuj parametry URL na obiekt
+            const params = new URLSearchParams(hash);
+            
+            // Pobierz token dostępu
+            return params.get('access_token');
+        }
+
+        // Przekazanie tokena do aplikacji Android
+        function sendTokenToApp() {
+            const token = getTokenFromUrl();
+            
+            if (token) {
+                console.log("Otrzymano token:", token.substring(0, 20) + "...");
+                
+                // Metoda 1: Komunikacja z WebView (dla Android)
+                if (window.Android && typeof window.Android.onOAuthTokenReceived === 'function') {
+                    window.Android.onOAuthTokenReceived(token);
+                }
+                // Metoda 2: Przekierowanie do deep linku (zapasowa)
+                else {
+                    console.log("Przekierowanie przez deep link...");
+                    window.location.href = 'cleverbay://oauth-callback?access_token=' + encodeURIComponent(token);
+                }
+            } else {
+                console.log("Brak tokena w URL");
+            }
+        }
+
+        // Wywołaj po załadowaniu strony
+        window.onload = sendTokenToApp;
+    </script>
+</head>
+<body>
+    <h1>CleverBay Authentication</h1>
+    <p>Processing your login request...</p>
+    <p>If this message persists, please return to the app.</p>
+    
+    <script>
+        // Dodatkowe zabezpieczenie - sprawdź ponownie po 1 sekundzie
+        setTimeout(sendTokenToApp, 1000);
+    </script>
+</body>
+</html>
