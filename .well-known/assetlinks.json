@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "pl.mojafirma.cleverbay",
+    "sha256_cert_fingerprints": [
+      "8A:C0:9E:4E:DA:10:BA:0E:93:07:DD:C2:B2:99:41:5E:26:93:E1:87:3F:F8:B4:20:A8:67:68:F7:0E:59:94:63"
+    ]
+  }
+}]
